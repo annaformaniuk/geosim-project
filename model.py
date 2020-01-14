@@ -18,7 +18,7 @@ class PredPreyModel(DynamicModel):
     self.report(self.pred, 'output/predInit')
 
   def dynamic(self):
-    # find all location with both predator and prey
+    # find all locations with both predator and prey
     both = pcrand(self.pred, self.prey)
     self.report(both, 'output/both')
 
