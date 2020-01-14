@@ -4,7 +4,9 @@ from pcraster.framework import *
 class PredPreyModel(DynamicModel):
   def __init__(self):
     DynamicModel.__init__(self)
-    setclone('clone.map')
+    # set clone directly:
+    # size 200x200, cell size 1, west coord: 0, north coord: 200
+    setclone(200, 200, 1, 0, 200)
 
   def initial(self):
     # set percentages for prey and predator populations
