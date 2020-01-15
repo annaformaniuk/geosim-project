@@ -8,4 +8,5 @@ Ferreri, L., & Venturino, E. (2013). Cellular automata for contact ecoepidemic p
 
 ## Notes 
 
-* All model outputs are saved into the `output` folder. The folder has to exist already, otherwise Python will throw an error. 
+* All outputs of the model without a pathogen are saved into the `output` folder. The folder has to exist already, otherwise Python will throw an error. 
+* Correspondingly, outputs of the model where predators can get infected are saved in `outputInfectedPred`.
