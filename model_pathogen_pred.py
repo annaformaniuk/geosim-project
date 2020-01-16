@@ -1,8 +1,6 @@
 from pcraster import *
 from pcraster.framework import *
 import numpy as np
-import pandas as pd
-
 
 class PredPreyModel(DynamicModel):
   def __init__(self):
@@ -58,39 +56,35 @@ class PredPreyModel(DynamicModel):
     self.prey = (window4total(scalar(survive)) + scalar(survive)) >= 1
     self.report(self.prey, 'outputInfectedPred/prey')
 
+# Open file to save results
+
+f= open("DataInfectedPredator.txt","w+")
+f.write("PercPrey-Ini,PercPred-Ini,PercPrey-Final,PercPred-Final"+"\n")
+
 nrOfTimeSteps=100
-
-initialPred=[]
-initialPrey=[]
-finalPropPred=[]
-finalPropPrey=[]
-
 # set percentages for prey and predator populations
-for percPrey in np.arange(0,1,0.01):
-  for percPred in np.arange(0,1,0.01):
+
+for percPrey in np.arange(0,1,0.05):
+  for percPred in np.arange(0,1,0.05):
     myModel = PredPreyModel()
     dynamicModel = DynamicFramework(myModel,nrOfTimeSteps)
     dynamicModel.run()
-    
+
     # extract information from the map
+    
     preyEq = readmap("outputInfectedPred/prey0000."+str(nrOfTimeSteps))
     predEq = readmap("outputInfectedPred/pred0000."+str(nrOfTimeSteps))
-    
+
     # compute calculations 
-    preyNum= maptotal(scalar(preyEq==1))/(200*200)
-    predNum= maptotal(scalar(predEq!=0))/(200*200)
     
-    # append calculations into a list
-    initialPred.append(percPred)
-    initialPrey.append(percPrey)
-    finalPropPred.append(preyNum)
-    finalPropPrey.append(predNum)
-    
-    # To keep track...
-    
-    print("PercPrey: " + str(float(percPrey)) + " PercPred: " + str(float(percPred)) + " PredFinal: " + str(float(preyNum)) + " PreyFinal: " + str(float(predNum)))
+    PercPreyFinal= maptotal(scalar(preyEq==1))/(200*200)
+    PercPredFinal= maptotal(scalar(predEq!=0))/(200*200)
 
-#saving the information
+    # Writting individial results into the file - Initial and final conditions are saved
 
-df = pd.DataFrame(list(zip(initialPred,initialPrey,finalPropPred,finalPropPrey)),columns =['Initial Pred','Initial Prey','Final Pred','Final Pred']) 
-df.to_csv("Results.csv") 
+    f.write(str(float(percPrey)) + "," + str(float(percPred)) + "," + str(float(PercPreyFinal)) + "," + str(float(PercPredFinal))+"\n")
+    print(str(float(percPrey)) + "," + str(float(percPred)) + "," + str(float(PercPreyFinal)) + "," + str(float(PercPredFinal))+"\n")
+
+
+#close file
+f.close()
