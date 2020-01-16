@@ -1,5 +1,6 @@
 from pcraster import *
 from pcraster.framework import *
+import numpy as np
 
 class PredPreyModel(DynamicModel):
   def __init__(self):
@@ -9,9 +10,7 @@ class PredPreyModel(DynamicModel):
     setclone(200, 200, 1, 0, 200)
 
   def initial(self):
-    # set percentages for prey and predator populations
-    percPrey = 0.1
-    percPred = 0.1
+    
     # percentage of infected predators
     percInf = 0.2
 
@@ -35,7 +34,7 @@ class PredPreyModel(DynamicModel):
     soundPred = pcrand(allPred, pcrnot(infPred))
 
     # find locations where infected or sound predators catch prey
-    infEats = pcrand(infPred, self.prey)
+    infEats = pcror(infPred, self.prey)
     soundEats = pcrand(soundPred, self.prey)
     # find all locations with both predator and prey
     both = pcrand(infEats, soundEats)
@@ -57,9 +56,11 @@ class PredPreyModel(DynamicModel):
     self.prey = (window4total(scalar(survive)) + scalar(survive)) >= 1
     self.report(self.prey, 'outputInfectedPred/prey')
 
-
-nrOfTimeSteps=100
-myModel = PredPreyModel()
-dynamicModel = DynamicFramework(myModel,nrOfTimeSteps)
-dynamicModel.run()
+nrOfTimeSteps=150
+# set percentages for prey and predator populations
+for percPrey in range(0,0.5,0.1):
+  for percPred in range (0,0.5,0.1):
+    myModel = PredPreyModel()
+    dynamicModel = DynamicFramework(myModel,nrOfTimeSteps)
+    dynamicModel.run()
 
