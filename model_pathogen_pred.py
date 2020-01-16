@@ -56,11 +56,30 @@ class PredPreyModel(DynamicModel):
     self.prey = (window4total(scalar(survive)) + scalar(survive)) >= 1
     self.report(self.prey, 'outputInfectedPred/prey')
 
-nrOfTimeSteps=150
+nrOfTimeSteps=100
+
+initialPred=[]
+initialPrey=[]
+finalPropPred=[]
+finalPropPrey=[]
+
 # set percentages for prey and predator populations
-for percPrey in range(0,0.5,0.1):
-  for percPred in range (0,0.5,0.1):
+for percPrey in np.arange(0,1,0.01):
+  for percPred in np.arange(0,1,0.01):
     myModel = PredPreyModel()
     dynamicModel = DynamicFramework(myModel,nrOfTimeSteps)
     dynamicModel.run()
+    preyEq = readmap("outputInfectedPred/prey0000."+str(nrOfTimeSteps))
+    predEq = readmap("outputInfectedPred/pred0000."+str(nrOfTimeSteps))
+    preyNum= maptotal(scalar(preyEq==1))/(200*200)
+    predNum= maptotal(scalar(predEq!=0))/(200*200)
+    initialPred.append(percPrey)
+    initialPrey.append(percPred)
+    finalPropPred.append(preyNum)
+    finalPropPrey.append(predNum)
+    
+    print("Hello world - PercPrey: " + str(float(percPrey)) + " PercPred: " + str(float(percPred)) + " PredFinal: " + str(float(preyNum)) + " PreyFinal: " + str(float(predNum)))
+
+
+
 
