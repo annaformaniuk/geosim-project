@@ -71,16 +71,26 @@ for percPrey in np.arange(0,1,0.01):
     myModel = PredPreyModel()
     dynamicModel = DynamicFramework(myModel,nrOfTimeSteps)
     dynamicModel.run()
+    
+    # extract information from the map
     preyEq = readmap("outputInfectedPred/prey0000."+str(nrOfTimeSteps))
     predEq = readmap("outputInfectedPred/pred0000."+str(nrOfTimeSteps))
+    
+    # compute calculations 
     preyNum= maptotal(scalar(preyEq==1))/(200*200)
     predNum= maptotal(scalar(predEq!=0))/(200*200)
+    
+    # append calculations into a list
     initialPred.append(percPred)
     initialPrey.append(percPrey)
     finalPropPred.append(preyNum)
     finalPropPrey.append(predNum)
     
+    # To keep track...
+    
     print("Hello world - PercPrey: " + str(float(percPrey)) + " PercPred: " + str(float(percPred)) + " PredFinal: " + str(float(preyNum)) + " PreyFinal: " + str(float(predNum)))
+
+#saving the information
 
 df = pd.DataFrame(list(zip(initialPred,initialPrey,finalPropPred,finalPropPrey)),columns =['Initial Pred','Initial Prey','Final Pred','Final Pred']) 
 df.to_csv("Results.csv") 
