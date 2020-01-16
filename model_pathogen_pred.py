@@ -12,7 +12,7 @@ class PredPreyModel(DynamicModel):
   def initial(self):
     
     # percentage of infected predators
-    percInf = 0.2
+    percInf = 0.5
 
     # create maps with that percentage of total pred/prey present
     self.prey = uniform(1) < percPrey
@@ -34,10 +34,10 @@ class PredPreyModel(DynamicModel):
     soundPred = pcrand(allPred, pcrnot(infPred))
 
     # find locations where infected or sound predators catch prey
-    infEats = pcror(infPred, self.prey)
+    infEats = pcrand(infPred, self.prey)
     soundEats = pcrand(soundPred, self.prey)
     # find all locations with both predator and prey
-    both = pcrand(infEats, soundEats)
+    both = pcror(infEats, soundEats)
     self.report(both, 'outputInfectedPred/both')
 
     # predators reproduce at these locations: sound ones in own cell and neighbourhood,
