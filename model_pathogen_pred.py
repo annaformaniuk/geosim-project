@@ -1,6 +1,8 @@
 from pcraster import *
 from pcraster.framework import *
 import numpy as np
+import pandas as pd
+
 
 class PredPreyModel(DynamicModel):
   def __init__(self):
@@ -73,13 +75,12 @@ for percPrey in np.arange(0,1,0.01):
     predEq = readmap("outputInfectedPred/pred0000."+str(nrOfTimeSteps))
     preyNum= maptotal(scalar(preyEq==1))/(200*200)
     predNum= maptotal(scalar(predEq!=0))/(200*200)
-    initialPred.append(percPrey)
-    initialPrey.append(percPred)
+    initialPred.append(percPred)
+    initialPrey.append(percPrey)
     finalPropPred.append(preyNum)
     finalPropPrey.append(predNum)
     
     print("Hello world - PercPrey: " + str(float(percPrey)) + " PercPred: " + str(float(percPred)) + " PredFinal: " + str(float(preyNum)) + " PreyFinal: " + str(float(predNum)))
 
-
-
-
+df = pd.DataFrame(list(zip(initialPred,initialPrey,finalPropPred,finalPropPrey)),columns =['Initial Pred','Initial Prey','Final Pred','Final Pred']) 
+df.to_csv("Results.csv") 
