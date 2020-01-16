@@ -88,7 +88,7 @@ for percPrey in np.arange(0,1,0.01):
     
     # To keep track...
     
-    print("Hello world - PercPrey: " + str(float(percPrey)) + " PercPred: " + str(float(percPred)) + " PredFinal: " + str(float(preyNum)) + " PreyFinal: " + str(float(predNum)))
+    print("PercPrey: " + str(float(percPrey)) + " PercPred: " + str(float(percPred)) + " PredFinal: " + str(float(preyNum)) + " PreyFinal: " + str(float(predNum)))
 
 #saving the information
 
