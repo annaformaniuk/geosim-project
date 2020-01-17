@@ -2,9 +2,7 @@
 
 For this project, we are implementing the model described in the following paper:
 
-Ferreri, L., & Venturino, E. (2013). Cellular automata for contact ecoepidemic processes in predator–prey systems. *Ecological complexity*, *13*, 8-20.
-
-
+[Ferreri, L., & Venturino, E. (2013)](https://www.sciencedirect.com/science/article/pii/S1476945X12000736). Cellular automata for contact ecoepidemic processes in predator–prey systems. *Ecological complexity*, *13*, 8-20.
 
 ## Notes 
 
