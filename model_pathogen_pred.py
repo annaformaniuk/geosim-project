@@ -56,16 +56,23 @@ class PredPreyModel(DynamicModel):
     self.prey = (window4total(scalar(survive)) + scalar(survive)) >= 1
     self.report(self.prey, 'outputInfectedPred/prey')
 
-# Open file to save results
-
-f= open("DataInfectedPredator.txt","w+")
-f.write("PercPrey-Ini,PercPred-Ini,PercPrey-Final,PercPred-Final"+"\n")
+#define number of Time Steps
 
 nrOfTimeSteps=100
+
+#define proportion (prey and predator) step size
+
+propstepSize=0.01
+
+# Open file to save results
+
+f= open("DataInfectedPredator_propstep_"+str(propstepSize)+".txt","w+")
+f.write("PercPrey-Ini,PercPred-Ini,PercPrey-Final,PercPred-Final"+"\n")
+
 # set percentages for prey and predator populations
 
-for percPrey in np.arange(0,1,0.05):
-  for percPred in np.arange(0,1,0.05):
+for percPrey in np.arange(0,1,propstepSize):
+  for percPred in np.arange(0,1,propstepSize):
     myModel = PredPreyModel()
     dynamicModel = DynamicFramework(myModel,nrOfTimeSteps)
     dynamicModel.run()
@@ -84,7 +91,6 @@ for percPrey in np.arange(0,1,0.05):
 
     f.write(str(float(percPrey)) + "," + str(float(percPred)) + "," + str(float(PercPreyFinal)) + "," + str(float(PercPredFinal))+"\n")
     print(str(float(percPrey)) + "," + str(float(percPred)) + "," + str(float(PercPreyFinal)) + "," + str(float(PercPredFinal))+"\n")
-
 
 #close file
 f.close()
