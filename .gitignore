@@ -1,5 +1,10 @@
 .vscode
 .mypy_cache
 
+# output directories
 output
 outputInfectedPred
+outputInfectedPrey
+
+# output files
+*.txt

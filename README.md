@@ -7,4 +7,4 @@ For this project, we are implementing the model described in the following paper
 ## Notes 
 
 * All outputs of the model without a pathogen are saved into the `output` folder. The folder has to exist already, otherwise Python will throw an error. 
-* Correspondingly, outputs of the model where predators can get infected are saved in `outputInfectedPred`.
+* Correspondingly, outputs of the model where predators can get infected are saved in `outputInfectedPred` and of the model with infected prey - in `outputInfectedPrey`.
