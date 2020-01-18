@@ -67,8 +67,8 @@ f.write("PercPrey-Ini,PercPred-Ini,PercPrey-Final,PercPred-Final"+"\n")
 
 # set percentages for prey and predator populations
 
-for percPrey in np.arange(0.4,0.5,propstepSize):
-  for percPred in np.arange(0.4,0.5,propstepSize):
+for percPrey in np.arange(0,1,propstepSize):
+  for percPred in np.arange(0,1,propstepSize):
     myModel = PredPreyModel()
     dynamicModel = DynamicFramework(myModel,nrOfTimeSteps)
     dynamicModel.run()
