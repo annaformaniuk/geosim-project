@@ -58,37 +58,39 @@ nrOfTimeSteps=100
 
 # define proportion (prey and predator) step size
 
-propstepSize=0.01
+propstepSize=0.1
 
 # Open file to save results
 
-f= open("testDataInfectedPrey_propstep_"+str(propstepSize)+".txt","w+")
-f.write("PercPrey-Ini,PercPred-Ini,PercPrey-Final,PercPred-Final"+"\n")
+f= open("DataInfectedPrey_propstep_"+str(propstepSize)+".txt","w+")
+f.write("PercPrey-Ini,PercPreyInf-Ini,PercPreySound-Ini,PercPred-Ini,PercPreyInf-Final,PercPreySound-Final,PercPred-Final"+"\n")
 
+# set percentage of infected preys
 # set percentages for prey and predator populations
 
-for percPrey in np.arange(0,1,propstepSize):
-  for percPred in np.arange(0,1,propstepSize):
-    myModel = PredPreyModel()
-    dynamicModel = DynamicFramework(myModel,nrOfTimeSteps)
-    dynamicModel.run()
+for percInf in np.arange(0,1.1,propstepSize):
+    for percPrey in np.arange(0,1,propstepSize):
+      for percPred in np.arange(0,1,propstepSize):
+        myModel = PredPreyModel()
+        dynamicModel = DynamicFramework(myModel,nrOfTimeSteps)
+        dynamicModel.run()
+        # extract information from the map
+        
+        preyEq = readmap("outputInfectedPrey/prey0000."+str(nrOfTimeSteps))
+        predEq = readmap("outputInfectedPrey/pred0000."+str(nrOfTimeSteps))
 
-    # extract information from the map
-    
-    preyEq = readmap("outputInfectedPrey/prey0000."+str(nrOfTimeSteps))
-    predEq = readmap("outputInfectedPrey/pred0000."+str(nrOfTimeSteps))
+        # compute calculations 
+        
+        PercPredFinal= maptotal(scalar(predEq==1))/(200*200)
+        
+        PercInfectedPreyFinal= maptotal(scalar(preyEq==2))/(200*200)
+        PercSoundPreyFinal= maptotal(scalar(preyEq==1))/(200*200)
 
-    print("outputInfectedPrey/prey0000."+str(nrOfTimeSteps))
+        # Writting individial results into the file - Initial and final conditions are saved
 
-    # compute calculations 
-    
-    PercPredFinal= maptotal(scalar(preyEq==1))/(200*200)
-    PercPreyFinal= maptotal(scalar(predEq!=0))/(200*200)
-
-    # Writting individial results into the file - Initial and final conditions are saved
-
-    f.write(str(float(percPrey)) + "," + str(float(percPred)) + "," + str(float(PercPreyFinal)) + "," + str(float(PercPredFinal))+"\n")
-    print(str(float(percPrey)) + "," + str(float(percPred)) + "," + str(float(PercPreyFinal)) + "," + str(float(PercPredFinal))+"\n")
-
+        f.write(str(float(percPrey)) + "," + str(float(percPrey*percInf)) + "," + str(float(percPrey-percPrey*percInf)) + "," + str(float(percPred))+","+str(float(PercInfectedPreyFinal))+","+str(float(PercSoundPreyFinal))+","+str(float(PercPredFinal))+"\n")
+     
+        print(str(float(percPrey)) + "," + str(float(percPrey*percInf)) + "," + str(float(percPrey-percPrey*percInf)) + "," + str(float(percPred))+","+str(float(PercInfectedPreyFinal))+","+str(float(PercSoundPreyFinal))+","+str(float(PercPredFinal))+"\n")
+     
 # close file
 f.close()
