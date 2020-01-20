@@ -10,9 +10,6 @@ class PredPreyModel(DynamicModel):
     setclone(200, 200, 1, 0, 200)
 
   def initial(self):
-    
-    # percentage of infected predators
-    percInf = 0.5
 
     # create maps with that percentage of total pred/prey present
     self.prey = uniform(1) < percPrey
@@ -62,35 +59,38 @@ nrOfTimeSteps=100
 
 #define proportion (prey and predator) step size
 
-propstepSize=0.01
+propstepSize=0.1
 
 # Open file to save results
 
 f= open("DataInfectedPredator_propstep_"+str(propstepSize)+".txt","w+")
-f.write("PercPrey-Ini,PercPred-Ini,PercPrey-Final,PercPred-Final"+"\n")
+f.write("PercPrey-Ini,PercPred-Ini,PercPredInf-Ini,PercPredSound,PercPrey-Final,PercPredInf-Final,PercPredSound-Final"+"\n")
 
+
+# set percentage of infected predators
 # set percentages for prey and predator populations
+for percInf in np.arange(0,1.1,propstepSize):
+    for percPrey in np.arange(0,1,propstepSize):
+      for percPred in np.arange(0,1,propstepSize):
+        myModel = PredPreyModel()
+        dynamicModel = DynamicFramework(myModel,nrOfTimeSteps)
+        dynamicModel.run()
 
-for percPrey in np.arange(0,1,propstepSize):
-  for percPred in np.arange(0,1,propstepSize):
-    myModel = PredPreyModel()
-    dynamicModel = DynamicFramework(myModel,nrOfTimeSteps)
-    dynamicModel.run()
+        # extract information from the map
+        
+        preyEq = readmap("outputInfectedPred/prey0000."+str(nrOfTimeSteps))
+        predEq = readmap("outputInfectedPred/pred0000."+str(nrOfTimeSteps))
 
-    # extract information from the map
-    
-    preyEq = readmap("outputInfectedPred/prey0000."+str(nrOfTimeSteps))
-    predEq = readmap("outputInfectedPred/pred0000."+str(nrOfTimeSteps))
+        # compute calculations 
+        
+        PercPreyFinal= maptotal(scalar(preyEq==1))/(200*200)
+        PercInfectedPredFinal= maptotal(scalar(predEq==2))/(200*200)
+        PercSoundPredFinal= maptotal(scalar(predEq==1))/(200*200)
 
-    # compute calculations 
-    
-    PercPreyFinal= maptotal(scalar(preyEq==1))/(200*200)
-    PercPredFinal= maptotal(scalar(predEq!=0))/(200*200)
+        # Writting individial results into the file - Initial and final conditions are saved
 
-    # Writting individial results into the file - Initial and final conditions are saved
-
-    f.write(str(float(percPrey)) + "," + str(float(percPred)) + "," + str(float(PercPreyFinal)) + "," + str(float(PercPredFinal))+"\n")
-    print(str(float(percPrey)) + "," + str(float(percPred)) + "," + str(float(PercPreyFinal)) + "," + str(float(PercPredFinal))+"\n")
-
+        f.write(str(float(percPrey)) + "," + str(float(percPred)) + "," + str(float(percPred*percInf)) + "," +str(float(percPred-percPred*percInf))+ ","+ str(float(PercPreyFinal)) + "," + str(float(PercInfectedPredFinal))+ "," + str(float(PercSoundPredFinal))+"\n")
+        print(str(float(percPrey)) + "," + str(float(percPred)) + "," + str(float(percPred*percInf)) + "," +str(float(percPred-percPred*percInf))+ ","+ str(float(PercPreyFinal)) + "," + str(float(PercInfectedPredFinal))+ "," + str(float(PercSoundPredFinal))+"\n")
+        
 #close file
 f.close()
