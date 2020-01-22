@@ -1,10 +1,9 @@
 .vscode
 .mypy_cache
+.DS_Store
 
 # output directories
 output
 outputInfectedPred
 outputInfectedPrey
 
-# output files
-*.txt
