@@ -19,7 +19,7 @@ library(tidyverse)
 
 
 
-Loading datasets
+Loading dataset
 ```{r}
 
 df.PreyPredatorModel<-as.data.frame(read.csv("DataPreyPredator_propstep_0.01.txt"))
